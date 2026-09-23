@@ -11,23 +11,11 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import qrcode from 'qrcode-generator';
-import { ROOT, readReferences, readLyrics, norm } from './parse.mjs';
+import { ROOT, readReferences, entryStarts } from './parse.mjs';
 
 export const REFS_URL = 'https://github.com/curtcox/PDoomVideo/blob/main/REFERENCES.md';
 export const CUES_FILE = resolve(ROOT, 'src/qrcues.js');
 const DUR = 156.6;
-
-// The exact second each entry starts: ?t= is rounded down, so look the time up where it came from.
-function entryStarts(entries) {
-  const LY = readLyrics(), shotsFile = resolve(ROOT, 'references/shots.json');
-  const shots = existsSync(shotsFile) ? JSON.parse(readFileSync(shotsFile, 'utf8')).shots : [];
-  return entries.map(e => {
-    const l = e.lyric != null && LY.find(l => norm(l.text) === norm(e.lyric) && Math.floor(l.start) === e.t);
-    if (l) return l.start;
-    const s = shots.find(s => Math.floor(s.start) === e.t);
-    return s ? +s.start.toFixed(2) : e.t;
-  });
-}
 
 export function buildCues({ hold = 3, ecc = 'M', base = REFS_URL } = {}) {
   const { entries } = readReferences(), starts = entryStarts(entries);

@@ -2,6 +2,8 @@
 
 Source code for the [Claude Opus 5.5 music video for *I'm Upping My P(doom) explained*](https://youtu.be/vDrZikYytOw).
 
+**Watch it with its references at [curtcox.github.io/PDoomVideo](https://curtcox.github.io/PDoomVideo/).**
+
 
 
 <img width="800" height="450" alt="recursion_loop" src="https://github.com/user-attachments/assets/7d6164ff-6706-40bb-bdf5-099d86e583e1" />
@@ -42,6 +44,7 @@ The video took two generations, both in Claude Code:
 | [`references/SHOTS.md`](references/SHOTS.md) | Every shot with rendered frames, its lyrics and its reference entries |
 | [`tools/refs/`](tools/refs/) | Checkers and the shot-index renderer for the reference list, and the QR footnote builder |
 | [`src/qrtag.js`](src/qrtag.js), [`src/qrcues.js`](src/qrcues.js) | The QR footnote tags of the annotated cut, and their cues (generated from REFERENCES.md) |
+| [`tools/site/`](tools/site/) | The website: the video beside its references, built from REFERENCES.md and published by [`.github/workflows/pages.yml`](.github/workflows/pages.yml) |
 
 ## Rendering
 
@@ -67,3 +70,13 @@ npm run refs:qr:scan                                     # decode every footnote
 To preview it, open `studio.html?qr&t=28` in Chrome. See [`tools/refs/README.md`](tools/refs/README.md#qr-footnotes) for how the footnotes are grouped and checked.
 
 If Chrome isn't installed in the default place for your OS (Windows, macOS or `/usr/bin/google-chrome`), add `--chrome=<path to chrome>`.
+
+## The website
+
+[The site](https://curtcox.github.io/PDoomVideo/) plays the video beside [`REFERENCES.md`](REFERENCES.md). While the song plays, the list follows along and highlights the current moment. Clicking any timestamp, shot or chapter seeks the video. It also has a topic view, search, a filter by link level, and a switch between the explained and original cuts. Links like `…/PDoomVideo/#121-sharp-left-turn-and-there-you-are` or `#t=81` open at a moment.
+
+Everything on the site is generated from `REFERENCES.md`, `references/shots.json` and this README, so to change the site, edit those. Every push to `main` rebuilds and publishes it through GitHub Actions. To preview it locally (Node only, no `npm install` needed):
+
+```bash
+npm run site:serve        # builds _site/ and serves it at http://localhost:8080/
+```

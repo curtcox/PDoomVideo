@@ -6,7 +6,7 @@
 //   #### [m:ss](https://youtu.be/<ID>?t=N): *(visual)* what   an entry for a moment between lyrics
 //   *On screen:* …                                           what the frame shows
 //   - 🎯 [title](url) · 🔍 [title](url) …                     references; a marker applies to the links after it
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import vm from 'node:vm';
@@ -83,3 +83,16 @@ export function readLyrics(file = resolve(ROOT, 'src/lyrics.js')) {
 
 // For comparing lyric text across files: ignore case, quotes and punctuation.
 export const norm = s => s.toLowerCase().replace(/[“”"‘’'.,!?]/g, '').replace(/\s+/g, ' ').trim();
+
+// The exact second each entry starts: ?t= is rounded down, so look the time up where it came from
+// (the lyric's start in src/lyrics.js, or the shot's start in references/shots.json).
+export function entryStarts(entries) {
+  const LY = readLyrics(), shotsFile = resolve(ROOT, 'references/shots.json');
+  const shots = existsSync(shotsFile) ? JSON.parse(readFileSync(shotsFile, 'utf8')).shots : [];
+  return entries.map(e => {
+    const l = e.lyric != null && LY.find(l => norm(l.text) === norm(e.lyric) && Math.floor(l.start) === e.t);
+    if (l) return l.start;
+    const s = shots.find(s => Math.floor(s.start) === e.t);
+    return s ? +s.start.toFixed(2) : e.t;
+  });
+}

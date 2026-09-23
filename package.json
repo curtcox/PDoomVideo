@@ -10,7 +10,9 @@
     "refs:index": "node tools/refs/shots.mjs --no-render",
     "refs:qr": "node tools/refs/qr.mjs",
     "refs:qr:scan": "node tools/refs/check-qr.mjs",
-    "refs:check": "node tools/refs/check-timeline.mjs && node tools/refs/qr.mjs --check && node tools/refs/check-links.mjs"
+    "refs:check": "node tools/refs/check-timeline.mjs && node tools/refs/qr.mjs --check && node tools/refs/check-links.mjs",
+    "site": "node tools/site/build.mjs",
+    "site:serve": "node tools/site/build.mjs --serve"
   },
   "keywords": [],
   "author": "",
