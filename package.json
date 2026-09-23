@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "refs:timeline": "node tools/refs/check-timeline.mjs",
+    "refs:links": "node tools/refs/check-links.mjs",
+    "refs:shots": "node tools/refs/shots.mjs",
+    "refs:index": "node tools/refs/shots.mjs --no-render",
+    "refs:check": "node tools/refs/check-timeline.mjs && node tools/refs/check-links.mjs"
   },
   "keywords": [],
   "author": "",

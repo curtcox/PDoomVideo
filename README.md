@@ -38,6 +38,9 @@ The video took two generations, both in Claude Code:
 | [`STORYBOARD.md`](STORYBOARD.md) | Opus's shot-by-shot plan |
 | [`ANIMATION_GUIDE.md`](ANIMATION_GUIDE.md) | Opus's style and code guide for its subagents |
 | [`legacy/`](legacy/) | The first generation |
+| [`REFERENCES.md`](REFERENCES.md) | A timestamped reading list for every lyric and sight gag, by timestamp and by topic |
+| [`references/SHOTS.md`](references/SHOTS.md) | Every shot with rendered frames, its lyrics and its reference entries |
+| [`tools/refs/`](tools/refs/) | Checkers and the shot-index renderer for the reference list |
 
 ## Rendering
 
@@ -49,4 +52,4 @@ node render.mjs --frames=0:156.6 --workers=4   # paint every frame into out/fram
 node render.mjs --encode --out=out/pdoom.mp4   # join the frames and the song into an MP4
 ```
 
-If Chrome isn't installed at the default Windows path, add `--chrome=<path to chrome>`.
+If Chrome isn't installed in the default place for your OS (Windows, macOS or `/usr/bin/google-chrome`), add `--chrome=<path to chrome>`.
