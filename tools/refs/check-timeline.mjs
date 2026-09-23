@@ -5,9 +5,11 @@
 //   · every lyric in src/lyrics.js has exactly one Part 1 entry, at floor(start), with the same words;
 //   · every entry sits inside its chapter's range and entries run in time order;
 //   · every entry has an On screen line and at least one reference (visual entries may skip references);
-//   · every #anchor and relative file link resolves.
+//   · every #anchor and relative file link resolves;
+//   · every QR footnote in src/qrcues.js opens a heading that exists (published codes can't be changed).
 // Exits 1 if anything fails.
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
+import vm from 'node:vm';
 import { resolve } from 'node:path';
 import { ROOT, VIDEO_ID, readReferences, readLyrics, links, norm, mmss } from './parse.mjs';
 
@@ -52,6 +54,14 @@ const anchors = new Set(headings.map(h => h.anchor));
 for (const l of links(md)) {
   if (l.url.startsWith('#')) { if (!anchors.has(l.url.slice(1))) problems.push(`line ${lineOf(l.index)}: anchor ${l.url} matches no heading`); }
   else if (!/^[a-z]+:/i.test(l.url) && !existsSync(resolve(ROOT, l.url.split('#')[0]))) problems.push(`line ${lineOf(l.index)}: file ${l.url} does not exist`);
+}
+
+// 5 · QR footnotes: a rendered code can't be edited, so the heading it opens has to keep existing
+const qrFile = resolve(ROOT, 'src/qrcues.js'), qr = {};
+if (existsSync(qrFile)) vm.runInNewContext(readFileSync(qrFile, 'utf8') + '\nthis.QR_CUES = QR_CUES;', qr);
+for (const c of qr.QR_CUES || []) {
+  const a = c.url.split('#')[1];
+  if (!anchors.has(a)) problems.push(`src/qrcues.js: footnote ${c.n} (${c.time}) opens #${a}, which matches no heading. Restore the heading, or run npm run refs:qr and re-render`);
 }
 
 console.log(`${entries.length} entries (${lyricEntries.length} lyric, ${entries.length - lyricEntries.length} visual), ${LY.length} lyrics, ${nTs} timestamp links, ${entries.reduce((n, e) => n + e.refs.length, 0)} references in Part 1`);

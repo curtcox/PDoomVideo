@@ -40,7 +40,8 @@ The video took two generations, both in Claude Code:
 | [`legacy/`](legacy/) | The first generation |
 | [`REFERENCES.md`](REFERENCES.md) | A timestamped reading list for every lyric and sight gag, by timestamp and by topic |
 | [`references/SHOTS.md`](references/SHOTS.md) | Every shot with rendered frames, its lyrics and its reference entries |
-| [`tools/refs/`](tools/refs/) | Checkers and the shot-index renderer for the reference list |
+| [`tools/refs/`](tools/refs/) | Checkers and the shot-index renderer for the reference list, and the QR footnote builder |
+| [`src/qrtag.js`](src/qrtag.js), [`src/qrcues.js`](src/qrcues.js) | The QR footnote tags of the annotated cut, and their cues (generated from REFERENCES.md) |
 
 ## Rendering
 
@@ -51,5 +52,18 @@ npm install
 node render.mjs --frames=0:156.6 --workers=4   # paint every frame into out/frames (resumable)
 node render.mjs --encode --out=out/pdoom.mp4   # join the frames and the song into an MP4
 ```
+
+### The annotated cut, with QR footnotes
+
+Add `--qr` to render a second version with a QR code for each moment in [`REFERENCES.md`](REFERENCES.md). There are 35 footnotes, each on a painted paper tag taped to the right edge, and each tag stays up for at least 3 s. Scanning a tag (or pausing and scanning) opens that timestamp's entry on GitHub. The frames go to `out/frames-qr`, so they don't mix with the plain cut.
+
+```bash
+npm run refs:qr                                          # rebuild src/qrcues.js after editing REFERENCES.md
+node render.mjs --qr --frames=0:156.6 --workers=4        # paint the annotated frames into out/frames-qr
+node render.mjs --qr --encode                            # → out/pdoom-refs.mp4
+npm run refs:qr:scan                                     # decode every footnote back out of rendered frames
+```
+
+To preview it, open `studio.html?qr&t=28` in Chrome. See [`tools/refs/README.md`](tools/refs/README.md#qr-footnotes) for how the footnotes are grouped and checked.
 
 If Chrome isn't installed in the default place for your OS (Windows, macOS or `/usr/bin/google-chrome`), add `--chrome=<path to chrome>`.

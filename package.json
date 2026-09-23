@@ -8,7 +8,9 @@
     "refs:links": "node tools/refs/check-links.mjs",
     "refs:shots": "node tools/refs/shots.mjs",
     "refs:index": "node tools/refs/shots.mjs --no-render",
-    "refs:check": "node tools/refs/check-timeline.mjs && node tools/refs/check-links.mjs"
+    "refs:qr": "node tools/refs/qr.mjs",
+    "refs:qr:scan": "node tools/refs/check-qr.mjs",
+    "refs:check": "node tools/refs/check-timeline.mjs && node tools/refs/qr.mjs --check && node tools/refs/check-links.mjs"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,10 @@
   "dependencies": {
     "p5": "^2.3.3",
     "p5.brush": "^2.2.3",
-    "puppeteer-core": "^25.11.0"
+    "puppeteer-core": "^25.11.0",
+    "qrcode-generator": "^2.0.4"
+  },
+  "devDependencies": {
+    "zxing-wasm": "^3.1.4"
   }
 }

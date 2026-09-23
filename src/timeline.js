@@ -1,4 +1,4 @@
-// timeline.js: chapter registry, brush-wipe chapter breaks, karaoke, corner P(doom) meter.
+// timeline.js: chapter registry, brush-wipe chapter breaks, karaoke, corner P(doom) meter (and QR footnotes: qrtag.js).
 //
 // Each chapter file calls chapter(name, start, end, shots) where shots = [[t0, fn], ...] in time order.
 // A shot function is called as fn(t, lt, dur): t = song time, lt = t - t0, dur = shot length. It paints the whole frame
@@ -40,6 +40,7 @@ function drawWorld(t) {
   if (!METER_SHOWN) { cornerMeter(t); flushLetters(); }
   WIPES.forEach((b, j) => { if (Math.abs(t - b) < WIPE_TR) wipe((t - (b - WIPE_TR)) / (2 * WIPE_TR), j); });
   karaoke(t);
+  qrTag(t);   // QR footnote tags, only in the annotated render (studio.html?qr)
 }
 
 function placeholder(t) {

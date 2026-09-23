@@ -205,6 +205,7 @@ function composite(t) {
   c.globalCompositeOperation = 'multiply'; c.drawImage(grainC, 0, 0);
   c.globalCompositeOperation = 'source-over';
   drawKaraokeText(c);
+  drawQRCode(c, t);   // after the grain, so the code stays crisp
 }
 window.renderAt = async (t, type = 'image/png', q = .92) => { T = t; await redraw(); composite(t); return outC.toDataURL(type, q); };
 // Contact sheet of several times, for quick visual checks: returns { url, ms[] }.
