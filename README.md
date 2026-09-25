@@ -18,7 +18,7 @@ Highly recommend checking it out!
 ## Credits
 
 - **Inspired by:** [this post on X](https://x.com/slimer48484/status/2097752569212756134) by deckard (@slimer48484), a 3D music video made with [Eidoverse](https://github.com/SkyeShark/eidoverse-video)
-- **Soundtrack:** `assets/pdoom.mp3` is that post's audio, an AI rendition of the song (most likely made with Suno)
+- **Soundtrack:** `assets/pdoom.mp3` is that post's audio, an AI rendition of the song made with Suno V6 (deckard says so, and says he didn't make it himself)
 - **Lyrics and original song:** MusicPerson and osmarks, 2024, made with Udio ([osmarks' YouTube upload](https://www.youtube.com/watch?v=uEB5E67vcPA), [their notes on the lyrics](https://docs.osmarks.net/hypha/p(doom)_song_objectively_correct_interpretation))
 - **Provenance:** [`PROVENANCE.md`](PROVENANCE.md) traces every layer, with dates, tools and the evidence for each claim
 - **Make your own:** [`MAKE_YOUR_OWN.md`](MAKE_YOUR_OWN.md) covers the tools and steps for each layer, from lyrics and song to video and annotation

@@ -35,7 +35,7 @@ This song has been made three ways:
 | Tool | Who used it | How |
 |---|---|---|
 | [Udio](https://www.udio.com/) (web) | MusicPerson and osmarks, 2024 | Style prompt *"Female vocalist, Electronic, Electropop, Pop, Energetic, Anthemic, Melodic, Playful, Synthpop, Uplifting, Optimistic"* plus the lyrics. Udio generated in about 30 s chunks, so the song was built by repeatedly extending it (32.8 s → 65.6 s → 98.2 s → 130.9 s), with many rejected takes. |
-| [Suno](https://suno.com/) (web) | most likely the 2026 rendition in this repo | Lyrics with section tags plus a style prompt. Suno writes a whole song in one go and can "cover" an existing one. It may reword lines slightly when it sings (compare the canonical lyrics with [what's sung](PROVENANCE.md#4-the-soundtrack-in-this-repo-a-suno-rendition-2026)). |
+| [Suno](https://suno.com/) V6 (web) | the 2026 rendition in this repo, per deckard (its maker is unknown) | Lyrics with section tags plus a style prompt. Suno writes a whole song in one go and can "cover" an existing one. It may reword lines slightly when it sings (compare the canonical lyrics with [what's sung](PROVENANCE.md#4-the-soundtrack-in-this-repo-a-suno-v6-rendition-2026)). |
 | [MiniMax Music 3](https://www.minimax.io/blog/minimax-music-3-0-next-generation-open-weights-production-ready-versatile-music-model) (open weights, local) | recommended by [Eidoverse](https://github.com/SkyeShark/eidoverse-video/blob/main/tools-guides/audio.md) | Runs in a local ComfyUI. See below. |
 
 For the local route with Eidoverse's driver:
@@ -55,10 +55,10 @@ Eidoverse's notes: the text encoder plans the song's length from the caption. Th
 
 John Heibel's process, from his README and the guides Opus wrote:
 
-1. **Direction, briefly.** Open an empty folder in Claude Code with the song file and ask for a music video. John's only direction was *"use the Clawd character design"* and *"give each lyric interesting visuals and transitions"*. He specified no scene ideas.
-2. **A first pass.** Opus 5.5 at Medium effort produced a single-page canvas version ([`legacy/`](legacy/)).
-3. **Feedback, then a second pass.** He asked it to *use p5 brushstrokes, make each scene visually interesting, and make every scene transition into the next*. Opus then wrote [`STORYBOARD.md`](STORYBOARD.md) (a shot-by-shot plan) and [`ANIMATION_GUIDE.md`](ANIMATION_GUIDE.md) (rules and shared API). It ran **parallel subagents**, one per chapter, each writing one file in [`src/ch/`](src/ch/) against the shared helpers.
-4. **Rendering.** [`render.mjs`](render.mjs) opens [`studio.html`](studio.html) in headless Chrome, paints each frame at time *t*, saves JPEGs from parallel workers, and joins them with the song in ffmpeg.
+1. **Direction, briefly.** In Claude Code, John *"simply pasted the lyrics and the audio file and told it to make a cutesy animation"* using Clawd, described only as *"the cute little orange blocky claude mascot"*. He gave it no art and no scene ideas.
+2. **A first pass.** Opus 5.5 at Medium effort *"returned pretty quickly with a basic animation"*, a single-page canvas version ([`legacy/`](legacy/)).
+3. **Feedback, then a second pass at xhigh effort.** He asked for p5 brushstrokes, more interesting scenes, *"minimal text, ... always some action in the scene, and ... coherent transitions between scenes"*. The main agent *"spun up 7 Opus 5.5 subagents"*, and *"45 minutes later"* the code was done. It used about half of a 5-hour usage window on a Claude Max 5x plan. Opus wrote [`STORYBOARD.md`](STORYBOARD.md) (a shot-by-shot plan) and [`ANIMATION_GUIDE.md`](ANIMATION_GUIDE.md) (rules and shared API). The subagents worked in parallel, each writing chapter files in [`src/ch/`](src/ch/) against the shared helpers. John says he *"had no hand in the script or storyboard"*.
+4. **Rendering**, which John says took the longest. [`render.mjs`](render.mjs) opens [`studio.html`](studio.html) in headless Chrome, paints each frame at time *t*, saves JPEGs from parallel workers, and joins them with the song in ffmpeg.
 
 The key design rule is that **every frame is a pure function of time**. No state carries between frames and there's no `Math.random()`, only seeded hashes. That's what lets frames render in parallel and out of order, and what lets the model check any moment as a still.
 
@@ -115,6 +115,6 @@ This fork's additions were made in Claude Code with Opus 5.5, and you can reuse 
 This isn't legal advice. It's what we could determine:
 
 - **This repo has no license file, and neither does John's original.** Without one, you can read and fork the code on GitHub, but you have no explicit permission to reuse it elsewhere. For your own project, start from [ClaudeAnimationBase](https://github.com/JohnHeibel/ClaudeAnimationBase) (MIT), or ask John.
-- **The lyrics** belong to MusicPerson and osmarks, and no license is stated. **The recording in `assets/pdoom.mp3`** came from deckard's video. Its generator's terms (Suno's differ by plan) and its maker's wishes govern reuse. Credit all of them, as the uploads in this history did, and ask before commercial use.
+- **The lyrics** belong to MusicPerson and osmarks, and no license is stated. **The recording in `assets/pdoom.mp3`** came from deckard's video, and deckard says he didn't make it. Suno's terms (which differ by plan) and the unknown maker's wishes govern reuse. Credit all of them, as the uploads in this history did, and ask before commercial use.
 - **Clawd** is Anthropic's Claude Code mascot, and Anthropic treats its name and look as its own. A third-party project called "Clawdbot" renamed itself after a trademark request. Fan videos like this one are common, but check before using it commercially. **Eidoverse** is AGPL-3.0, and its bundled `claude_suit.vrm` is CC-BY (credit digi).
 - **Say what made it.** Every layer here credited its tools. That's why this history could be traced at all.
