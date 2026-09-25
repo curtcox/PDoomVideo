@@ -187,4 +187,31 @@ The research for this repo happened in two stretches of Claude Code sessions.
 
 ### 8b. This provenance record (2026-09-25)
 
-*Being filled in by the last commit of that session.*
+One Claude Code session in the Claude desktop app (Code tab) on Curt's Mac, from 12:44 to about 15:15 UTC.
+- **Model and settings:** Claude Opus 5.5 (`claude-opus-5-5`), high effort, auto permission mode.
+- **What Curt provided:** his own account of the history, to confirm or correct (quoted in [Corrections](#corrections-to-the-initial-account)). He also asked for three things: the tools and techniques behind every layer, answers to "where did it come from / how was it made / how could I do it", and continued research until the leads ran out.
+- **Commits:** `0a52f93`, `0fc19c2`, `b52f700`, `d38c3f1`, `9a9af1f` and the one that added this section. Curt pushed them.
+
+**Tools and methods.** The session made about 175 tool calls: 90 shell commands, 18 web searches, 8 page fetches, 25 built-in browser actions, and file reads and edits.
+- **Git and the GitHub API** (`git`, `gh`): commit authors, committers and trailers; fork parents; creation times; forks; licenses; code search across GitHub; and a shallow clone of eidoverse-video to read its credits and production log.
+- **Platform data, read without logging in:**
+  - YouTube: the page's player data for titles, channels, publish times, lengths and descriptions, plus its storyboard thumbnails.
+  - Udio: the song API for authors, prompts, creation times and lengths.
+  - Suno: the clip API for model, task and creation time.
+  - X: timestamps decoded from post IDs, and the fxtwitter API for post text, media and replies.
+- **Media forensics with ffmpeg and ffprobe:**
+  - container metadata;
+  - frame contact sheets streamed from the X videos;
+  - a phase-inverted null test of `assets/pdoom.mp3` against each video's soundtrack;
+  - caption-change detection on deckard's video, compared with `src/lyrics.js`;
+  - tempo and beat-phase estimation with a pure-Python onset autocorrelation;
+  - SSIM between this repo's renders and John's published video.
+- **Reproduction:** `npm install`, then rendering stills and a 10-second frame range with `render.mjs` to measure speed (0.9 s per frame with 1 worker, 0.35 s with 4, on an Apple M1).
+- **Built-in browser pane:** YouTube search and pages, Udio's page and API, and a logged-out view of X (no posts visible).
+- **Logged-in X, read-only:** Curt ran a separate research prompt in the Claude in Chrome extension on his own account, under a strict read-only policy (no likes, replies, follows or DMs). It read the replies and quote posts under deckard's and John's posts, deckard's posts from Sep 8 to 25, and targeted searches. Every quote used here was then re-checked against the fxtwitter API.
+
+**What didn't work:**
+- X's syndication endpoints and Nitter mirrors were blocked.
+- Suno's search API needs a login.
+- YouTube embeds wouldn't play in the browser pane.
+- The desktop app's session search couldn't find the 2026-09-23 sessions (see 8a).
