@@ -9,6 +9,23 @@
 
 All times are UTC unless marked otherwise.
 
+## Short answers
+
+**Where did this come from?** This repo is Curt Cox's fork of [JohnHeibel/PDoomVideo](https://github.com/JohnHeibel/PDoomVideo).
+- **The words:** written in 2024 by the Udio user MusicPerson and by osmarks, with a few lines from friends and from Claude. The first recording was made in Udio.
+- **The soundtrack** (`assets/pdoom.mp3`): a later AI rendition of those lyrics, most likely made in Suno. It was lifted from deckard's (@slimer48484) 3D music video, posted on X on 2026-09-09 and made with the Eidoverse toolkit.
+- **The painted video:** John Heibel had Claude Opus 5.5 make it from scratch in Claude Code, released 2026-09-22.
+- **This fork's additions:** Curt added the reference list, the QR-footnoted cut and the website on 2026-09-23, also with Opus 5.5.
+
+**How was it made?**
+- **Visuals:** code, not generated pixels. Opus 5.5 wrote a storyboard and a style guide, then ran parallel subagents that each wrote one chapter as p5.js + p5.brush drawing code. Headless Chrome paints each frame, and ffmpeg joins the frames with the song.
+- **Timing:** the lyric timings were read off the captions in deckard's video.
+- **Human input:** a couple of sentences of direction, plus one round of feedback.
+
+Details and evidence are in sections [6](#6-the-painted-opus-55-remake-john-heibel-2026-09-22) and [7](#7-the-annotation-and-the-website-curt-cox-2026-09-23).
+
+**How could I do something like it?** See [`MAKE_YOUR_OWN.md`](MAKE_YOUR_OWN.md).
+
 ## The lineage at a glance
 
 | # | Layer | Who | When | Tools | In this repo? |
@@ -78,6 +95,7 @@ So the video you watch on [the site](https://curtcox.github.io/PDoomVideo/) is a
   - **Model-written planning:** [`STORYBOARD.md`](STORYBOARD.md) (shot list), and [`ANIMATION_GUIDE.md`](ANIMATION_GUIDE.md), written by Opus to brief the **subagents it ran in parallel**, one chapter each (`src/ch/c01…c09`).
   - **Rendering stack** (versions from `package-lock.json`): [p5.js](https://p5js.org/) 2.3.3 and [p5.brush](https://github.com/acamposuribe/p5.brush) 2.2.3 for watercolor and ink, with Google Fonts Permanent Marker and Shantell Sans. Frames are painted at 1920×1080 in `studio.html`. [`render.mjs`](render.mjs) drives headless Google Chrome through puppeteer-core 25.11.0 at 24 fps with parallel workers, saves JPEG frames, and encodes with ffmpeg (libx264, `-preset slow -crf 17`, yuv420p, AAC 192 kb/s) against `assets/pdoom.mp3`.
   - The character is **Clawd**, the orange pixel-block mascot that greets users at the top of a Claude Code session, re-drawn in watercolor in [`src/clawd.js`](src/clawd.js).
+- ✅ **This repo renders the published video.** We rendered stills at 28 s, 81.5 s and 140 s from this repo's source and compared them with the same moments of John's X upload (1280×720, 24 fps, 156.63 s). SSIM is 0.94–0.95 after X's re-encoding, against 0.60 for a mismatched pair. The frames are visibly identical down to the P(doom) meter's percentage. His upload's audio also nulls against `assets/pdoom.mp3` once its 43 ms encoder delay is removed.
 - ✅ **How Opus got the song's timing without hearing it.** [`src/lyrics.js`](src/lyrics.js) says its timings were *"timed from the subtitles burned into the source video"*, meaning deckard's 9/9 video (the ignored `assets/source.mp4`). We checked this by detecting every caption change in deckard's video at 20 fps and comparing them with the 46 lyric start times. 32 fall within 0.25 s of a caption change, and the median offset is 0.2 s. The outliers are places where the caption bar was hard to read against the scene.
 - ✅ **The beat grid is not the song's tempo.** [`src/core.js`](src/core.js) hard-codes `BPM = 88` with the first beat at 0.21 s, and every "on the beat" hit in the storyboard follows that grid. An onset-envelope autocorrelation of `assets/pdoom.mp3` puts the song at about **132 BPM** (a 0.455 s beat). The autocorrelation is 0.24 at 0.455 s against 0.04 at 88 BPM's 0.682 s, which is no better than a random lag. Fitting a beat grid gives 131.98 BPM with the first beat at about 0.225 s. So the model got the downbeat nearly right (it used 0.21 s) but the tempo wrong. 88 is exactly 2/3 of 132, so each of the video's beats lasts 1.5 of the song's. Every other video beat (every 1.36 s) lands on a real beat, and the ones in between fall on the song's off-beat "and". The code's grid scores no better than a random grid against the song's onsets (0.40, against a random-phase 132 BPM baseline of 0.42 and the best-fit 132 BPM grid's 0.67).
 - ✅ **Credits inside the renders.** The first generation's page and its closing frame both say "song & original video by @slimer48484" ([`legacy/flash-version.html`](legacy/flash-version.html)). The final video's last shot paints only "created by Claude Opus 5.5" ([`src/ch/c09_finale.js`](src/ch/c09_finale.js)).
@@ -94,7 +112,7 @@ This repo is [curtcox/PDoomVideo](https://github.com/curtcox/PDoomVideo), a GitH
 |---|---|---|
 | `5844829` | 09-23 14:16 | [`REFERENCES.md`](REFERENCES.md): a timestamped reading list for every lyric and sight gag, by timestamp and by topic, with link-specificity marks. Also [`references/SHOTS.md`](references/SHOTS.md), `shots.json` and 64 rendered frame strips, plus Node checkers in [`tools/refs/`](tools/refs/) (timeline consistency, outside link status, shot index). |
 | `bf1e1bc` | 09-23 14:39 | The **annotated cut**: 35 QR footnotes on painted paper tags ([`src/qrtag.js`](src/qrtag.js), [`src/qrcues.js`](src/qrcues.js)), generated from REFERENCES.md with [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) 2.0.4 and verified by decoding rendered frames with [zxing-wasm](https://github.com/Sec-ant/zxing-wasm) 3.1.4 (`npm run refs:qr:scan`). |
-| `6589467` | 09-23 16:05 | Points the README at Curt's upload [*I'm Upping My P(Doom) explained*](https://youtu.be/vDrZikYytOw) (YouTube, 2026-09-23 20:46 UTC, 2:37). Its description credits this fork and John's repo. |
+| `6589467` | 09-23 16:05 | Points the README at Curt's upload [*I'm Upping My P(Doom) explained*](https://youtu.be/vDrZikYytOw) (YouTube, 2026-09-23 20:46 UTC, 2:37). Its description credits this fork and John's repo. ✅ It is the QR-annotated cut: YouTube's own preview thumbnails show the "FOOTNOTE" tags from `render.mjs --qr`. |
 | `df03e06` | 09-23 16:26 | [The website](https://curtcox.github.io/PDoomVideo/): a dependency-free static generator ([`tools/site/build.mjs`](tools/site/build.mjs), `app.js`, `style.css`) that plays the video beside REFERENCES.md. It's published by the GitHub Actions workflow [`.github/workflows/pages.yml`](.github/workflows/pages.yml) (Node 22, `actions/deploy-pages`). |
 
 ✅ GitHub Actions first published the site at 2026-09-23 21:26 UTC (`df03e06`) and rebuilt it after the 9/25 merge. The later John commits were brought in with GitHub's web "sync fork" (committer "GitHub", `6bb699e`).

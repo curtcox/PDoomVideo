@@ -17,9 +17,11 @@ Highly recommend checking it out!
 
 ## Credits
 
-- **Inspired by:** [this post on X](https://x.com/slimer48484/status/2097752569212756134)
-- **Song:** as far as I could find, it comes from [this YouTube video from 2024](https://www.youtube.com/watch?v=uEB5E67vcPA)
-- **Provenance:** [`PROVENANCE.md`](PROVENANCE.md) traces every layer: the lyrics (MusicPerson and osmarks, 2024, Udio), the soundtrack in `assets/pdoom.mp3` (the audio of deckard's 9/9 video, likely Suno), deckard's 3D Eidoverse video, this Opus 5.5 remake, and the annotation and website added in this fork
+- **Inspired by:** [this post on X](https://x.com/slimer48484/status/2097752569212756134) by deckard (@slimer48484), a 3D music video made with [Eidoverse](https://github.com/SkyeShark/eidoverse-video)
+- **Soundtrack:** `assets/pdoom.mp3` is that post's audio, an AI rendition of the song (most likely made with Suno)
+- **Lyrics and original song:** MusicPerson and osmarks, 2024, made with Udio ([osmarks' YouTube upload](https://www.youtube.com/watch?v=uEB5E67vcPA), [their notes on the lyrics](https://docs.osmarks.net/hypha/p(doom)_song_objectively_correct_interpretation))
+- **Provenance:** [`PROVENANCE.md`](PROVENANCE.md) traces every layer, with dates, tools and the evidence for each claim
+- **Make your own:** [`MAKE_YOUR_OWN.md`](MAKE_YOUR_OWN.md) covers the tools and steps for each layer, from lyrics and song to video and annotation
 
 ## How it was made
 
@@ -52,6 +54,7 @@ The video took two generations, both in Claude Code:
 | [`tools/refs/`](tools/refs/) | Checkers and the shot-index renderer for the reference list, and the QR footnote builder |
 | [`src/qrtag.js`](src/qrtag.js), [`src/qrcues.js`](src/qrcues.js) | The QR footnote tags of the annotated cut, and their cues (generated from REFERENCES.md) |
 | [`PROVENANCE.md`](PROVENANCE.md) | Where each layer came from (lyrics, audio, visuals, annotation), who made it and with what tools, with the evidence |
+| [`MAKE_YOUR_OWN.md`](MAKE_YOUR_OWN.md) | How to make something like it yourself, layer by layer |
 | [`tools/site/`](tools/site/) | The website: the video beside its references, built from REFERENCES.md and published by [`.github/workflows/pages.yml`](.github/workflows/pages.yml) |
 
 ## Rendering
